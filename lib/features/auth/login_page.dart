@@ -1,12 +1,33 @@
 import 'package:flutter/material.dart';
-import '../home/home_page.dart';
-import 'mobile_login_page.dart'; // ✅ Mobile login import
+import 'mobile_login_page.dart';
+import 'role_selection_page.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  void login(BuildContext context) {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+
+    // ✅ Simple validation (ANY email works)
+    if (email.isNotEmpty && password.isNotEmpty) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const RoleSelectionPage(),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please enter email and password"),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,80 +36,65 @@ class LoginPage extends StatelessWidget {
         title: const Text("Login"),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "Welcome to Rydo",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              const SizedBox(height: 50),
 
-            const SizedBox(height: 30),
-
-            // Email
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: "Email",
-                border: OutlineInputBorder(),
+              const Text(
+                "Welcome to Rydo 🚀",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-            ),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 40),
 
-            // Password
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: "Password",
-                border: OutlineInputBorder(),
+              TextField(
+                controller: emailController,
+                decoration: const InputDecoration(
+                  labelText: "Email",
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
 
-            const SizedBox(height: 30),
+              const SizedBox(height: 20),
 
-            // Login Button
-            ElevatedButton(
-              onPressed: () {
-                String email = emailController.text.trim();
-                String password = passwordController.text.trim();
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: "Password",
+                  border: OutlineInputBorder(),
+                ),
+              ),
 
-                if (email == "admin@gmail.com" && password == "1234") {
+              const SizedBox(height: 30),
+
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () => login(context),
+                  child: const Text("Login"),
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              TextButton(
+                onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HomePage(),
+                      builder: (context) => MobileLoginPage(),
                     ),
                   );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Invalid Email or Password"),
-                    ),
-                  );
-                }
-              },
-              child: const Text("Login"),
-            ),
-
-            const SizedBox(height: 10),
-
-            // ✅ Mobile Login Button
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MobileLoginPage(),
-                  ),
-                );
-              },
-              child: const Text("Login with Mobile Number"),
-            ),
-          ],
+                },
+                child: const Text("Login with Mobile Number"),
+              ),
+            ],
+          ),
         ),
       ),
     );
