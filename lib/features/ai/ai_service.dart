@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AiService {
-  static const String openAiApiKey = '
+  // ❌ API key yahan blank rakho (secure ke liye)
+  static const String openAiApiKey = "";
+
   // AI Chat request using Chat Completions API
   static Future<String> getAiResponse(String message) async {
     try {
@@ -28,15 +30,16 @@ class AiService {
         final data = jsonDecode(response.body);
         return data['choices'][0]['message']['content'].toString();
       } else {
-        print(response.body); // 🔹 debug output
+        print(response.body);
         return "AI service failed. Please try again.";
       }
     } catch (e) {
-      print(e); // 🔹 debug error
+      print(e);
       return "AI service failed. Check your internet or API key.";
     }
   }
 
+  // 🚗 Fare calculation
   static double calculateFare(double distanceKm) {
     const baseFare = 50.0;
     const perKm = 10.0;
